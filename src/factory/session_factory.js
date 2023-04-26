@@ -1,12 +1,22 @@
 import UserDaoMongoDB from "../DAO/session_DAO";
-import { database_type } from "../config/dotenv_config.js"
+import { database_type } from "../config/dotenv_config.js";
+
+//SINGLETON
+
+let instance = null;
 
 class SessionFactory {
-    constructor() {
-      this.sessionDAO = null;
+  constructor() {
+    if (instance) {
+      return instance;
     }
+
+    this.sessionDAO = null;
+    instance = this;
+  }
   
-    getDAO() {
+  getDAO() {
+    if (!this.sessionDAO) {
       switch(database_type) {
         case "MONGO":
           this.sessionDAO = new UserDaoMongoDB();
@@ -15,8 +25,9 @@ class SessionFactory {
           throw new Error("No se ha definido un tipo de base de datos");
           break;
       }
-      return this.sessionDAO;
     }
+    return this.sessionDAO;
+  }
 }
-  
-module.exports = new SessionFactory();
+
+export default SessionFactory;

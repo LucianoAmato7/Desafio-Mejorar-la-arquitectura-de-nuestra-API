@@ -20,18 +20,9 @@ class ProductsDaoMongoDB {
   }
 
   //crea un producto. Recibe title, brand, price, thumbnail y stock.
-  async CreateProd(data) {
+  async CreateProd(prodtoAdd) {
     try {
-      function random(min, max) {
-        return Math.floor(Math.random() * (max - min + 1) + min);
-      }
-      const date = new Date().toLocaleString();
-      const prodToAdd = {
-        ...data,
-        code: random(1, 9999).toString(),
-        timestamp: date,
-      };
-      const newProd = new this.model(prodToAdd);
+      const newProd = new this.model(prodtoAdd);
       await newProd.save();
       console.log("Producto creado con exito");
       return newProd;

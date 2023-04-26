@@ -65,20 +65,17 @@ export function PassportLogic() {
           const salt = await bcrypt.genSalt(10);
           const hashedPassword = await bcrypt.hash(password, salt);
 
-          const newUser = {
-            username: name,
-            email,
-            password: hashedPassword,
-            address,
-            age,
-            phone_number: `+54${phone_number}`,
-            image: req.file
-              ? `/images/${req.file.filename}`
-              : `/images/default.png`,
-            cartID: "",
-          };
+          const imagen = req.file ? `/images/${req.file.filename}` : `/images/default.png`;
 
-          await SaveUser_controller(newUser);
+          await SaveUser_controller(
+            name, 
+            email, 
+            hashedPassword, 
+            address, 
+            age, 
+            phone_number, 
+            imagen
+          );
 
           return done(null, newUser);
         } catch (err) {

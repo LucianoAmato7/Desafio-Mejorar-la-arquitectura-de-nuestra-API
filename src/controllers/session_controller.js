@@ -2,6 +2,7 @@ import passport from "passport";
 import { checkAuthentication } from "../config/passport_config.js";
 import { upload } from "../config/multer_config.js";
 import SessionFactory from "../factory/session_factory.js";
+import {userDTO} from "../DTO/user_DTO.js"
 
 const session_factory_DAO = SessionFactory.getDAO();
 
@@ -59,17 +60,35 @@ export const Logout_controller = (req, res) => {
         res.render("logout", { user });
       }
     });
-    //SE DESCONECTA LA BASE DE DATOS
-    session_factory_DAO.MongoDB_Disconnect(); //LLAMAR AL REPOSITORY DE CONNECTION EN DONDE VA A ESTAR LA CLASE ConnectionDaoMongoDB
+    session_factory_DAO.MongoDB_Disconnect();
   });
 };
 
 export const FindUser_controller = async (email) => {
-  await session_factory_DAO.MongoDB_Connect(); //LLAMAR AL REPOSITORY DE CONNECTION EN DONDE VA A ESTAR LA CLASE ConnectionDaoMongoDB
-  const user_controller = await session_factory_DAO.FindUser(email);
-  return user_controller;
+  await session_factory_DAO.MongoDB_Connect();
+  const user = await session_factory_DAO.FindUser(email);
+  return user;
 };
 
-export const SaveUser_controller = async (newUser) => {
-  await session_factory_DAO.SaveUser(newUser);
+export const SaveUser_controller = async (
+    name, 
+    email, 
+    hashedPassword, 
+    address, 
+    age, 
+    phone_number, 
+    imagen
+  ) => {
+
+  const userToAdd = userDTO(
+    name, 
+    email, 
+    hashedPassword, 
+    address, 
+    age, 
+    phone_number, 
+    imagen
+  )
+
+  await session_factory_DAO.SaveUser(userToAdd);
 };

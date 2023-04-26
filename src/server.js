@@ -91,8 +91,10 @@ app.get("/", checkAuthentication, (req, res) => {
 
   res.render("inicio", { toRender });
 
-  io.on("connection", (socket) => {
-    console.log("Nuevo cliente conectado");
+  //APLICAR LOGICA PARA QUE SE VEAN PRODUCTOS Y MENSAJES
+
+  // io.on("connection", (socket) => {
+  //   console.log("Nuevo cliente conectado");
 
     //MSJS
 
@@ -114,7 +116,7 @@ app.get("/", checkAuthentication, (req, res) => {
     //       });
     //   });
     // }, 2000);
-  });
+  // });
 });
 
 

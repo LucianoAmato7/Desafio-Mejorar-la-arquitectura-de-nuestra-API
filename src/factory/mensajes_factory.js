@@ -1,12 +1,22 @@
 import MsjDaoMongoDB from "../DAO/mensajes_DAO.js";
 import { database_type } from "../config/dotenv_config.js"
 
+//SINGLETON
+
+let instance = null;
+
 class MensajesFactory {
-    constructor() {
-      this.mensajesDAO = null;
+  constructor() {
+    if (instance) {
+      return instance;
     }
-  
-    getDAO() {
+
+    this.mensajesDAO = null;
+    instance = this;
+  }
+
+  getDAO() {
+    if (!this.mensajesDAO) {
       switch(database_type) {
         case "MONGO":
           this.mensajesDAO = new MsjDaoMongoDB();
@@ -15,8 +25,10 @@ class MensajesFactory {
           throw new Error("No se ha definido un tipo de base de datos");
           break;
       }
-      return this.mensajesDAO;
     }
+
+    return this.mensajesDAO;
+  }
 }
-  
-module.exports = new MensajesFactory();
+
+export default MensajesFactory;

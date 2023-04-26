@@ -1,12 +1,22 @@
 import ProductsDaoMongoDB from "../DAO/productos_DAO.js";
-import { database_type } from "../config/dotenv_config.js"
+import { database_type } from "../config/dotenv_config.js";
+
+//SINGLETON
+
+let instance = null;
 
 class ProductosFactory {
-    constructor() {
-      this.productosDAO = null;
+  constructor() {
+    if (instance) {
+      return instance;
     }
+
+    this.productosDAO = null;
+    instance = this;
+  }
   
-    getDAO() {
+  getDAO() {
+    if (!this.productosDAO) {
       switch(database_type) {
         case "MONGO":
           this.productosDAO = new ProductsDaoMongoDB();
@@ -15,8 +25,9 @@ class ProductosFactory {
           throw new Error("No se ha definido un tipo de base de datos");
           break;
       }
-      return this.productosDAO;
     }
+    return this.productosDAO;
+  }
 }
-  
-module.exports = new ProductosFactory();
+
+export default ProductosFactory;

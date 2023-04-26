@@ -88,7 +88,6 @@ function AddMensaje() {
       alias: document.getElementById("enviarAlias").value,
       avatar: document.getElementById("enviarAvatar").value,
     },
-    fyh: new Date().toLocaleString(),
     text: document.getElementById("enviarMsj").value,
   };
   socket.emit("nuevo-mensaje", mensaje);
